@@ -21,7 +21,7 @@ const Signup = () => {
             return;
         }
         try {
-            const response = await axios.post('/api/signup', {
+            const response = await axios.post('http://localhost:5050/api/signup', {
                 name,
                 email,
                 password,
@@ -43,7 +43,7 @@ const Signup = () => {
     return (
         <div className='main'>
             <div className='tunerImg'>
-                <img className='pic' src='./images/signup.jpg'></img>
+                <img className='pic' src='./images/signup.jpg' alt='pic'></img>
             </div>
 
             <form onSubmit={handleSubmit} className='form'>

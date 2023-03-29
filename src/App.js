@@ -7,6 +7,8 @@ import Upload from './component/Upload/Upload';
 import VideoPlayer from './component/VideoPlayer/videoPlayer';
 import ExistingPage from './component/ExistingPage/ExistingPage'
 import MyVideos from './component/my-video/My-videos';
+import NewVideo from './component/ExistingPage/NewVideo';
+import NewDashboard from './component/Dashboard/NewDashboard';
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
         <Route exact="true" path="/upload" element={<Upload />} />
         <Route exact="true" path="/videos" element={<VideoPlayer />} />
         <Route exact="true" path="/myvideos" element={<MyVideos />} />
+        <Route exact="true" path="/profile/:id" element={<NewVideo />} />
+        <Route exact="true" path="/profile/:id" element={<NewDashboard />} />
       </Routes>
     </Router>
   );
