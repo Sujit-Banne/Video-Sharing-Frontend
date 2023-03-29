@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './ExistingPage.css'
-
+import LOGO from '../logo.PNG'
 function VideoGallery() {
     const navigate = useNavigate();
     const [videoList, setVideoList] = useState([]);
@@ -27,14 +27,16 @@ function VideoGallery() {
 
     // Make API request to fetch video data
     useEffect(() => {
-        axios.get('/api/existingvideo')
-            .then((response) => {
-                setVideoList(response.data);
+        fetch('http://localhost:5050/api/existingvideo')
+            .then((response) => response.json())
+            .then((data) => {
+                setVideoList(data);
             })
             .catch((error) => {
                 console.log(error);
             });
     }, []);
+
 
     const filteredVideoList = videoList.filter((video) => {
         return video.upload_title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -46,10 +48,11 @@ function VideoGallery() {
                 key={video._id}
                 onClick={() => handleThumbnailClick(video._id)}
             >
-
-
                 <div className="video-thumbnail">
-                    <img src={video.thumbnail_path} alt="video thubmnail" key={video._id} />
+                    <img src={video.thumbnail_path} alt="video thubmnail" key={video._id}
+                        onClick={() => {
+                            navigate(`/profile/${video._id}`, { state: video })
+                        }} />
                 </div>
                 <div className="video-details">
                     <span className="username">
@@ -74,7 +77,7 @@ function VideoGallery() {
     return (
         <>
             <div className="navbar">
-                <img src="./images/logo.PNG" alt="logo" className="logo" />
+                <img src={LOGO} alt="logo" className="logo" />
                 <div className="search-bar">
                     <input
                         type="text"
@@ -123,39 +126,6 @@ function VideoGallery() {
                 <div className="videos-container">
                     {displayedVideos}
                 </div>
-
-                {selectedVideoId && (
-                    <div className="selected-video">
-                        <video src={selectedVideoId} controls />
-                    </div>
-                )}
-
-                {selectedVideoId && (
-                    <div className="related-videos-container">
-                        <h4>Related Videos</h4>
-                        <div className="related-videos-list">
-                            {videoList
-                                .filter((video) => video._id !== selectedVideoId)
-                                .sort(() => Math.random() - 0.5)
-                                .slice(0, 3)
-                                .map((video) => (
-                                    <div
-                                        className="related-video"
-                                        key={video._id}
-                                        onClick={() => handleThumbnailClick(video._id)}
-                                    >
-                                        <div className="related-video-thumbnail">
-                                            <img src={video.thumbnail_path} alt="related video thumbnail" />
-                                        </div>
-                                        <div className="related-video-details">
-                                            <span className="related-username">{video.uploader_name}</span>
-                                            <span className="related-video-title">{video.upload_title.replace(/_/g, " ")}</span>
-                                        </div>
-                                    </div>
-                                ))}
-                        </div>
-                    </div>
-                )}
             </div>
         </>
     );

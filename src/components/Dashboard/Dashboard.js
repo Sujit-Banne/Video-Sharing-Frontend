@@ -20,7 +20,7 @@ function Dashboard() {
         const tokenTime = JSON.parse(localStorage.getItem('userTokenTime'));
         if (tokenTime) {
             axios
-                .get('/api/videolist', {
+                .get('http://localhost:5050/api/videolist', {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: 'Bearer ' + tokenTime.token,
@@ -58,7 +58,7 @@ function Dashboard() {
     const randomIndex = Math.floor(Math.random() * videoList.length);
 
     const videos = filteredVideoList
-        .slice(0, showAllVideos ? filteredVideoList.length : 6) // show 6 videos by default or all if toggle is clicked
+        .slice(0, showAllVideos ? filteredVideoList.length : 50) // show 6 videos by default or all if toggle is clicked
         .map((video) => {
             return (
                 <>
@@ -68,7 +68,11 @@ function Dashboard() {
                         onClick={() => handleThumbnailClick(video.video_path, video._id)}
                     >
                         <div className="video-thumbnail">
-                            <img src={video.thumbnail_path} alt="video thubmnail" key={video._id} target="_blank" />
+                            {/* <img src={video.thumbnail_path} alt="video thubmnail" key={video._id} target="_blank" /> */}
+                            <img src={video.thumbnail_path} alt="video thubmnail" key={video._id}
+                                onClick={() => {
+                                    navigate(`/profile/${video._id}`, { state: video })
+                                }} />
                         </div>
                         <span className="username">
                             {video.uploader_name}
